@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="map_reso" default="0.05"/>
+    <arg name="map_size" default="10.0"/>
+    <arg name="yaw_reso" default="0.087"/>
+    <arg name="cloud_topic" default="/cloud"/>
+    <node pkg="raycast_mapping_ros" type="raycast_mapping_node" name="raycast_mapping" output="screen">
+        <param name="map_reso" value="$(arg map_reso)"/>
+        <param name="map_size" value="$(arg map_size)"/>
+        <param name="yaw_reso" value="$(arg yaw_reso)"/>
+        <remap from="/cloud" to="$(arg cloud_topic)"/>
+    </node>
+</launch>
