@@ -72,7 +72,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: base_scan
     Frame Rate: 30
   Name: root
   Tools:
@@ -106,7 +106,7 @@ Visualization Manager:
       Name: Current View
       Near Clip Distance: 0.009999999776482582
       Scale: 97.89771270751953
-      Target Frame: base_link
+      Target Frame: <Fixed Frame>
       X: 0
       Y: 0
     Saved: ~
