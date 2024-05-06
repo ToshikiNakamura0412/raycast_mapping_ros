@@ -110,7 +110,7 @@ private:
    * @return true If the point is in the map
    * @return false If the point is not in the map
    */
-  bool in_map(const double dist, const double angle, const nav_msgs::MapMetaData &map_info);
+  bool in_map(const float dist, const float angle, const nav_msgs::MapMetaData &map_info);
 
   /**
    * @brief Convert x, y to grid index
@@ -120,7 +120,7 @@ private:
    * @param map_info Map information
    * @return int Grid index
    */
-  int xy_to_grid_index(const double x, const double y, const nav_msgs::MapMetaData &map_info);
+  int xy_to_grid_index(const float x, const float y, const nav_msgs::MapMetaData &map_info);
 
   float map_reso_;  // [m/cell]
   float map_size_;

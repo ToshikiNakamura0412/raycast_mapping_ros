@@ -96,8 +96,8 @@ nav_msgs::OccupancyGrid LocalMapCreator::create_map(const sensor_msgs::PointClou
     if (!in_map(point.x, point.y, precast_db.info))
       continue;
 
-    const double dist = hypot(point.x, point.y);
-    const double angle = atan2(point.y, point.x);
+    const float dist = hypot(point.x, point.y);
+    const float angle = atan2(point.y, point.x);
     const int angle_id = calc_angle_id(angle, precast_db.yaw_reso);
 
     const std::vector<PrecastData> &precast_data = precast_db.bins[angle_id];
@@ -123,13 +123,13 @@ nav_msgs::OccupancyGrid LocalMapCreator::init_map(const nav_msgs::MapMetaData &m
   return local_map;
 }
 
-bool LocalMapCreator::in_map(const double x, const double y, const nav_msgs::MapMetaData &map_info)
+bool LocalMapCreator::in_map(const float x, const float y, const nav_msgs::MapMetaData &map_info)
 {
   return map_info.origin.position.x <= x && x <= map_info.origin.position.x + map_info.width * map_info.resolution &&
          map_info.origin.position.y <= y && y <= map_info.origin.position.y + map_info.height * map_info.resolution;
 }
 
-int LocalMapCreator::xy_to_grid_index(const double x, const double y, const nav_msgs::MapMetaData &map_info)
+int LocalMapCreator::xy_to_grid_index(const float x, const float y, const nav_msgs::MapMetaData &map_info)
 {
   const int index_x = static_cast<int>(round((x - map_info.origin.position.x) / map_info.resolution));
   const int index_y = static_cast<int>(round((y - map_info.origin.position.y) / map_info.resolution));
