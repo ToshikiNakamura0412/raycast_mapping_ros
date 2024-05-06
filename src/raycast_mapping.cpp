@@ -11,7 +11,7 @@
 
 #include "raycast_mapping/raycast_mapping.h"
 
-LocalMapCreator::LocalMapCreator() : private_nh_("~")
+LocalMapCreator::LocalMapCreator(void) : private_nh_("~")
 {
   private_nh_.param<float>("map_reso", map_reso_, 0.05);
   private_nh_.param<float>("map_size", map_size_, 10.0);
