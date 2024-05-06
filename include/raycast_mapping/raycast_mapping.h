@@ -46,7 +46,7 @@ public:
   /**
    * @brief Construct a new Local Map Creator object
    */
-  LocalMapCreator();
+  LocalMapCreator(void);
 
 private:
   /**
