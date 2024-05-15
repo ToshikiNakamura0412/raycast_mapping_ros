@@ -73,8 +73,8 @@ std::pair<float, float> LocalMapCreator::calc_dist_and_angle(const int index, co
 {
   const int index_x = index % map_info.width;
   const int index_y = static_cast<int>(index / map_info.width);
-  const float x = index_x * map_info.resolution + map_info.origin.position.x;
-  const float y = index_y * map_info.resolution + map_info.origin.position.y;
+  const float x = index_x * map_info.resolution + map_info.origin.position.x + map_info.resolution / 2.0;
+  const float y = index_y * map_info.resolution + map_info.origin.position.y + map_info.resolution / 2.0;
   return std::make_pair(hypot(x, y), atan2(y, x));
 }
 
@@ -130,8 +130,8 @@ bool LocalMapCreator::in_map(const float x, const float y, const nav_msgs::MapMe
 
 int LocalMapCreator::xy_to_grid_index(const float x, const float y, const nav_msgs::MapMetaData &map_info)
 {
-  const int index_x = static_cast<int>(round((x - map_info.origin.position.x) / map_info.resolution));
-  const int index_y = static_cast<int>(round((y - map_info.origin.position.y) / map_info.resolution));
+  const int index_x = static_cast<int>(floor((x - map_info.origin.position.x) / map_info.resolution));
+  const int index_y = static_cast<int>(floor((y - map_info.origin.position.y) / map_info.resolution));
   return index_x + (index_y * map_info.width);
 }
 
