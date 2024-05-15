@@ -2,7 +2,6 @@
  * @file raycast_mapping.cpp
  * @author Toshiki Nakamura
  * @brief C++ implementation of Ray Casting Update Algorithm for 2D Mapping
- * @date 2024-05-06
  * @copyright Copyright (c) 2024
  */
 
