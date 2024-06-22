@@ -5,13 +5,15 @@
  * @copyright Copyright (c) 2024
  */
 
+#include <string>
 #include <utility>
 #include <vector>
 
 #include "raycast_mapping/raycast_mapping.h"
 
-LocalMapCreator::LocalMapCreator(void) : private_nh_("~")
+LocalMapCreator::LocalMapCreator(void) : private_nh_("~"), tf_listener_(tf_buffer_)
 {
+  private_nh_.param<std::string>("frame_id", frame_id_, "base_footprint");
   private_nh_.param<float>("map_reso", map_reso_, 0.05);
   private_nh_.param<float>("map_size", map_size_, 10.0);
   private_nh_.param<float>("yaw_reso", yaw_reso_, 0.087);
@@ -20,6 +22,7 @@ LocalMapCreator::LocalMapCreator(void) : private_nh_("~")
   cloud_sub_ = nh_.subscribe("/cloud", 1, &LocalMapCreator::cloud_callback, this);
 
   ROS_INFO_STREAM(ros::this_node::getName() << " node has started..");
+  ROS_INFO_STREAM("frame_id: " << frame_id_);
   ROS_INFO_STREAM("map_reso: " << map_reso_);
   ROS_INFO_STREAM("map_size: " << map_size_);
   ROS_INFO_STREAM("yaw_reso: " << yaw_reso_);
@@ -29,8 +32,28 @@ LocalMapCreator::LocalMapCreator(void) : private_nh_("~")
 
 void LocalMapCreator::cloud_callback(const sensor_msgs::PointCloud2::ConstPtr &msg)
 {
-  nav_msgs::OccupancyGrid local_map = create_map(*msg, precast_db_);
-  local_map.header.frame_id = msg->header.frame_id;
+  // Transform point cloud to the frame of the local map
+  geometry_msgs::TransformStamped transform_stamped;
+  while (ros::ok())
+  {
+    try
+    {
+      transform_stamped = tf_buffer_.lookupTransform(frame_id_, msg->header.frame_id, ros::Time(0));
+      break;
+    }
+    catch (tf2::TransformException &ex)
+    {
+      ROS_WARN("%s", ex.what());
+      ros::Duration(0.5).sleep();
+    }
+  }
+  sensor_msgs::PointCloud2 cloud_transformed;
+  Eigen::Matrix4f transform = tf2::transformToEigen(transform_stamped.transform).matrix().cast<float>();
+  pcl_ros::transformPointCloud(transform, *msg, cloud_transformed);
+
+  // Create local map
+  nav_msgs::OccupancyGrid local_map = create_map(cloud_transformed, precast_db_);
+  local_map.header.frame_id = frame_id_;
   local_map.header.stamp = ros::Time::now();
   map_pub_.publish(local_map);
 }
@@ -58,7 +81,7 @@ PrecastDB LocalMapCreator::create_precast_db(const float map_reso, const float m
     {
       precast_db.bins[angle_id].push_back(data);
     }
-    catch(const std::exception& e)
+    catch (const std::exception &e)
     {
       ROS_ERROR_STREAM(e.what());
       exit(1);

@@ -10,8 +10,13 @@
 
 #include <nav_msgs/OccupancyGrid.h>
 #include <pcl_ros/point_cloud.h>
+#include <pcl_ros/transforms.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <string>
+#include <tf2_eigen/tf2_eigen.h>
+#include <tf2_ros/buffer.h>
+#include <tf2_ros/transform_listener.h>
 #include <utility>
 #include <vector>
 
@@ -122,6 +127,7 @@ private:
    */
   int xy_to_grid_index(const float x, const float y, const nav_msgs::MapMetaData &map_info);
 
+  std::string frame_id_;
   float map_reso_;  // [m/cell]
   float map_size_;
   float yaw_reso_;  // [rad/cell]
@@ -131,6 +137,9 @@ private:
   ros::NodeHandle private_nh_;
   ros::Publisher map_pub_;
   ros::Subscriber cloud_sub_;
+
+  tf2_ros::Buffer tf_buffer_;
+  tf2_ros::TransformListener tf_listener_;
 };
 
 #endif  // RAYCAST_MAPPING_RAYCAST_MAPPING_H
