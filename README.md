@@ -63,6 +63,8 @@ roslaunch raycast_mapping_ros test.launch
   - Input point cloud data
 
 #### Parameters
+- ~\<name>/<b>frame_id</b> (string, default: `base_footprint`):<br>
+  The frame id of the local map
 - ~\<name>/<b>map_reso</b> (float, default: `0.05` [m/cell]):<br>
   The resolution of the map
 - ~\<name>/<b>map_size</b> (float, default: `10.0` [m]):<br>
