@@ -2,7 +2,10 @@
 <launch>
     <arg name="rviz_path" default="$(find raycast_mapping_ros)/launch/rviz.rviz"/>
 
-    <include file="$(find raycast_mapping_ros)/launch/raycast_mapping.launch"/>
+    <include file="$(find raycast_mapping_ros)/launch/raycast_mapping.launch">
+        <arg name="output" value="screen"/>
+        <arg name="frame_id" value="base_scan"/>
+    </include>
 
     <include file="$(find scan_to_pcl_ros)/launch/scan_to_pcl.launch"/>
     <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch"/>
